@@ -11,4 +11,17 @@ export class PizzaService {
             data
         });
     }
+    async findAll() {
+        return this.prisma.pizza.findMany();
+    }
+
+    async findById(id: string) {
+        const pizza = await this.prisma.pizza.findUnique({
+            where: { id }
+        });
+        if (!pizza) {
+            throw new Error("Pizza not found");
+        }
+        return pizza;
+    }
 }
