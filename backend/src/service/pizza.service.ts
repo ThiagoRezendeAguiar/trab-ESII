@@ -1,6 +1,7 @@
 import { inject, injectable } from "tsyringe";
-import { CreatePizzaInput } from "../model/pizza.model";
+import { CreatePizzaInput,UpdatePizzaInput } from "../model/pizza.model";
 import { PrismaClient } from "@prisma/client";
+import { NotFoundError,ValidationError } from "../utils/errors";
 
 @injectable()
 export class PizzaService {
@@ -20,8 +21,27 @@ export class PizzaService {
             where: { id }
         });
         if (!pizza) {
-            throw new Error("Pizza not found");
+            throw new NotFoundError("Pizza");
         }
         return pizza;
+    }
+
+    async update(id: string, data: UpdatePizzaInput) {
+        await this.findById(id);
+        return this.prisma.pizza.update({
+            where: { id },
+            data
+        });
+    }
+
+    async updateAvailability(id: string, isAvailable: unknown) {
+        if (typeof isAvailable !== 'boolean') {
+            throw new ValidationError("isAvailable must be a boolean value");
+        }
+        await this.findById(id);
+        return this.prisma.pizza.update({
+            where: { id },
+            data: { isAvailable }
+        });
     }
 }
