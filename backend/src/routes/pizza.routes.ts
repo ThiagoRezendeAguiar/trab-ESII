@@ -11,5 +11,6 @@ export default async function pizzaRoutes(fastify: FastifyInstance) {
     fastify.get("/:id", pizzaController.getPizzaById.bind(pizzaController));
     fastify.put("/:id", { schema: updatePizzaSchema }, pizzaController.updatePizza.bind(pizzaController));
     fastify.patch("/:id/availability", { schema: updateAvailabilitySchema }, pizzaController.updateAvailability.bind(pizzaController));
+    fastify.delete("/:id", pizzaController.deletePizza.bind(pizzaController));
 
 }

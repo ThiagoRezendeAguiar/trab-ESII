@@ -44,4 +44,11 @@ export class PizzaService {
             data: { isAvailable }
         });
     }
+
+    async delete(id: string) {
+        await this.findById(id);
+        return this.prisma.pizza.delete({
+            where: { id }
+        });
+    }
 }

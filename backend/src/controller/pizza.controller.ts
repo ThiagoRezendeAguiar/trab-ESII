@@ -54,4 +54,10 @@ export class PizzaController {
     );
     reply.send(updatedPizza);
   }
+
+  async deletePizza(request: FastifyRequest<{Params: {id: string}}>, reply: FastifyReply) {
+    const { id } = request.params;
+    await this.pizzaService.delete(id);
+    reply.status(204).send();
+}
 }
