@@ -6,6 +6,7 @@ import { FaArrowLeft } from 'react-icons/fa6';
 import { FaMinus, FaPlus } from 'react-icons/fa';
 import { useState } from 'react';
 import ConfirmButton from '../../components/ConfirmButton';
+import BackButton from '../../components/BackButton';
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -36,17 +37,7 @@ const ProductDetail = () => {
   // Pegar produto pelo id para colocar sua imagem 
   return (
     <Stack >
-       <Button 
-        onClick={() => navigate('/')}
-        p="30px"
-        m={{base: "0", md: "10px"}}
-        maxW="80px"
-        _hover={{opacity: 0.8}}
-        justifyContent="start"
-        bg="none"
-        >
-          <FaArrowLeft size={20} />
-      </Button>
+       <BackButton url='/' />
       <Stack alignItems="center">
         <Image
             src={img}
