@@ -1,8 +1,6 @@
 import { Button, Center, FormControl, FormLabel, Image, Radio, RadioGroup, Stack } from '@chakra-ui/react'
-import { useNavigate, useParams } from 'react-router-dom'
-
+import { useParams } from 'react-router-dom'
 import img from '../../assets/images/margherita.png' 
-import { FaArrowLeft } from 'react-icons/fa6';
 import { FaMinus, FaPlus } from 'react-icons/fa';
 import { useState } from 'react';
 import ConfirmButton from '../../components/ConfirmButton';
@@ -10,8 +8,6 @@ import BackButton from '../../components/BackButton';
 
 const ProductDetail = () => {
   const { id } = useParams();
-
-  const navigate = useNavigate();
 
   const [ammount, setAmmount] = useState<number>(1);
 
@@ -122,7 +118,7 @@ const ProductDetail = () => {
           </FormControl>
         </Stack>
         
-        <ConfirmButton text="Confirm" onClick={() => {}}>
+        <ConfirmButton text="Confirm" redirect='/'>
 
         </ConfirmButton>
 

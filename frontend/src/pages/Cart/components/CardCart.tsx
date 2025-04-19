@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardBody, CardFooter, Heading, Image, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Stack, Text } from "@chakra-ui/react";
+import { Button, Card, CardBody, CardFooter, Heading, Image, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Stack, Text } from "@chakra-ui/react";
 import { useState } from "react";
 import { FaTrash } from "react-icons/fa";
 
@@ -34,21 +34,22 @@ const CardCart: React.FC<CardCartProps> = (props: CardCartProps) => {
         >
         <Image
             objectFit='cover'
-            maxW={{ base: '100%', sm: '200px' }}
+            maxW={{base: "100%", sm: "150px" }}
+            h="auto"
             src={image}
             alt={name}
         />
 
         <Stack >
-            <CardBody>
-            <Heading size='lg' color="secondary">{name}</Heading>
+            <CardBody p="10px">
+            <Heading size='md' color="secondary">{name}</Heading>
 
-            <Text py='1' color="#959595" fontWeight="500" fontSize='20px'>
+            <Text py='1' color="#959595" fontWeight="500" fontSize='md'>
                Size: {size}
             </Text>
             </CardBody>
 
-            <CardFooter alignItems="center" gap={2} display="flex" flexDir={{base: "row", sm:"column", md: "row"}} >
+            <CardFooter alignItems="center" gap={2} display="flex" flexDir={{base: "row", sm:"column", md: "row"}} p="10px">
                 <Stack direction="row" alignItems="center" >
                     <Text color="#959595" fontWeight="400">Quantity</Text>
                     <NumberInput 

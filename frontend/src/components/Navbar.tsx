@@ -23,6 +23,7 @@ const Navbar = () => {
           </Flex>
           
           <Flex alignItems="center">
+            
             <Button 
               onClick={() => navigate('/cart')}
                 bg="none"

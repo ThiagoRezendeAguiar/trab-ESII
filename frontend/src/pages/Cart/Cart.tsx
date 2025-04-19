@@ -1,12 +1,14 @@
-import { Box, Center, Flex, Heading, Stack } from "@chakra-ui/react"
+import { Box, Center, Flex, Heading, Stack, Text } from "@chakra-ui/react"
 import BackButton from "../../components/BackButton"
 import CardCart from "./components/CardCart"
 
 import image from '../../assets/images/margherita.png'
+import ConfirmButton from "../../components/ConfirmButton"
 
 const Cart = () => {
+
   return (
-    <Stack minH="100vh">
+    <Stack minH="100vh" >
       <Flex 
         direction="row" 
         alignItems="center"
@@ -21,7 +23,7 @@ const Cart = () => {
 
         <Heading 
           fontSize="30px" 
-          fontWeight="600"
+          fontWeight="700"
           textAlign="center"
           width="100%"  
         >
@@ -49,9 +51,24 @@ const Cart = () => {
           image={image}
           >
             
-          </CardCart>
+          </CardCart> 
+
+          
         </Stack>
       </Center>
+
+     <Center p="20px 0 50px 0">
+      <Stack maxW="container.md" w={{base: "90%", md: "100%" }} gap={5}>
+          <Flex w="100%" justifyContent="space-between">
+            <Text fontWeight="700" fontSize='xl'> Total </Text>
+            <Text fontWeight="500" fontSize='xl'> $ XXX </Text> { /* Get All Cards e calcula o preço total */ }
+          </Flex>
+
+          <Center>
+            <ConfirmButton text="Place Order" redirect='/profile' />
+          </Center>
+        </Stack>
+     </Center>
       
     </Stack>
   )
