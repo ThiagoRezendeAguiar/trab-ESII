@@ -1,4 +1,4 @@
-import { Button, Flex, Icon, Image, Stack, Text } from '@chakra-ui/react';
+import { Button, Flex, Image, Stack, Text } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { FaShoppingCart } from 'react-icons/fa';
 import logo from '../assets/images/pizza-logo.png';
