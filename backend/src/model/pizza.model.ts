@@ -10,6 +10,6 @@ export interface Pizza {
 }
 
 export type CreatePizzaInput = Omit<Pizza, 'id' |'isAvailable' |'createdAt' | 'updatedAt'>;
-export type UpdatePizzaInput = Partial< Omit<Pizza, 'createdAt' | 'updatedAt'>> ;
+export type UpdatePizzaInput = Partial<CreatePizzaInput>;
 
 

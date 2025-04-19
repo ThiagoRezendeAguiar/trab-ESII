@@ -34,7 +34,7 @@ export class PizzaService {
         });
     }
 
-    async updateAvailability(id: string, isAvailable: unknown) {
+    async updateAvailability(id: string, isAvailable: boolean) {
         if (typeof isAvailable !== 'boolean') {
             throw new ValidationError("isAvailable must be a boolean value");
         }
