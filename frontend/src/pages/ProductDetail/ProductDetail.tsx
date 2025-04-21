@@ -9,24 +9,24 @@ import BackButton from '../../components/BackButton';
 const ProductDetail = () => {
   const { id } = useParams();
 
-  const [ammount, setAmmount] = useState<number>(1);
+  const [amount, setAmount] = useState<number>(1);
 
   const [value, setValue] = useState('');
 
   const handleSum = () => {
-    if(ammount >= 50) {
-      setAmmount(50);
+    if(amount >= 50) {
+      setAmount(50);
     }
     else{
-      setAmmount(ammount + 1);
+      setAmount(amount + 1);
     }
   }
   const handleSubtraction = () => {
-    if(ammount === 1) {
-      setAmmount(1);
+    if(amount === 1) {
+      setAmount(1);
     }
     else{
-      setAmmount(ammount - 1);
+      setAmount(amount - 1);
     }
   }
 
@@ -53,7 +53,7 @@ const ProductDetail = () => {
               <FaPlus size={20} />
           </Button>
           <Center fontSize="25px" fontWeight="600">
-            {ammount}
+            {amount}
           </Center>
           <Button 
               onClick={handleSubtraction} 

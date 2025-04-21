@@ -21,7 +21,7 @@ const Payment = () => {
           textAlign="center"
           width="100%"  
         >
-          Profile
+          Payment
         </Heading>
         <Stack as="form" onSubmit={handleSubmit} maxW="container.md" w="100%" px={{base: '10px', md: 'none'}} gap={5}>
 

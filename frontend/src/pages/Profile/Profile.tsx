@@ -1,7 +1,6 @@
-import { Box, Center, Flex, Heading, Stack } from "@chakra-ui/react"
+import { Center, Flex, Heading, Stack } from "@chakra-ui/react"
 import ConfirmButton from "../../components/ConfirmButton"
 import { FaEnvelope, FaMap, FaPhoneAlt, FaUser } from "react-icons/fa"
-import Input from "../../components/FormControl";
 import FormControl from "../../components/FormControl";
 
 

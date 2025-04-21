@@ -40,13 +40,13 @@ const Cart = () => {
           
         >
           <CardCart 
-          id="Margherita" name="Margherita" price={19.99} initAmmount={3}
+          id="Margherita" name="Margherita" price={19.99} initAmount={3}
           size="Medium"
           image={image}
           ></CardCart>
 
           <CardCart 
-          id="Margherita" name="Margherita" price={19.99} initAmmount={1}
+          id="Margherita" name="Margherita" price={19.99} initAmount={1}
           size="Medium"
           image={image}
           >

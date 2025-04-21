@@ -7,18 +7,18 @@ type CardCartProps = {
     image: string;
     name: string;
     price: number;
-    initAmmount: number;
+    initAmount: number;
     size: string;
 }
 
 const CardCart: React.FC<CardCartProps> = (props: CardCartProps) => {
 
-    const { image, name, price, initAmmount, size } = props;
+    const { image, name, price, initAmount, size } = props;
 
-    const [ammount, setAmmount] = useState<number>(initAmmount);
+    const [amount, setAmount] = useState<number>(initAmount);
 
     const calculatePrice = () => {
-        const totalPrice = price * ammount;
+        const totalPrice = price * amount;
         return totalPrice.toFixed(2);
     }
 
@@ -53,8 +53,8 @@ const CardCart: React.FC<CardCartProps> = (props: CardCartProps) => {
                 <Stack direction="row" alignItems="center" >
                     <Text color="#959595" fontWeight="400">Quantity</Text>
                     <NumberInput 
-                        value={ammount} 
-                        onChange={(valueString) => setAmmount(parseInt(valueString || '0'))}
+                        value={amount} 
+                        onChange={(valueString) => setAmount(parseInt(valueString || '0'))}
                         min={1} 
                         max={50} 
                         maxW="100px"
