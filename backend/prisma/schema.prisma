@@ -7,26 +7,110 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Product {
-  id          String   @id @default(cuid())
-  name        String   @db.VarChar(120)
-  description String?  @db.Text
-  price       Decimal  @db.Decimal(10, 2)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  categoryId  String
-  category    Category @relation(fields: [categoryId], references: [id])
+model Pizza {
+  id          String      @id @default(cuid())
+  name        String      @db.VarChar(50)
+  description String?     @db.Text
+  price       Decimal     @db.Decimal(10, 2)
+  ingredients String[]
+  isAvailable Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  category  String?
+  OrderItem   OrderItem[]
 
-  @@map("products")
+  @@map("pizzas")
 }
 
-model Category {
-  id          String   @id @default(cuid())
-  name        String   @db.VarChar(120)
-  description String?  @db.Text
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  products    Product[]
+model Customer {
+  id        String    @id @default(cuid())
+  name      String    @db.VarChar(50)
+  email     String    @unique @db.VarChar(100)
+  phone     String?   @db.VarChar(20)
+  addresses Address[]
+  orders    Order[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
-  @@map("categories")
+  @@map("customers")
+}
+
+model Address {
+  id         String   @id @default(cuid())
+  street     String   @db.VarChar(100)
+  number     String   @db.VarChar(10)
+  complement String?  @db.VarChar(10)
+  district   String   @db.VarChar(50)
+  city       String   @db.VarChar(50)
+  state      String   @db.VarChar(50)
+  zipCode    String   @db.VarChar(20)
+  isDefault  Boolean  @default(false)
+  orders     Order[]
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  @@map("addresses")
+}
+
+model Order {
+  id           String      @id @default(cuid())
+  customerId   String
+  customer     Customer    @relation(fields: [customerId], references: [id])
+  addressId    String
+  address      Address     @relation(fields: [addressId], references: [id])
+  status       OrderStatus @default(PENDING)
+  items        OrderItem[]
+  total        Decimal     @db.Decimal(10, 2)
+  deliveryFee  Decimal     @db.Decimal(10, 2)
+  deliveryTime DateTime?
+  payment      Payment?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id       String    @id @default(cuid())
+  orderId  String
+  pizzaId  String
+  size     PizzaSize
+  quantity Int
+  price    Decimal   @db.Decimal(10, 2)
+  notes    String?   @db.Text
+  Order    Order     @relation(fields: [orderId], references: [id])
+  Pizza    Pizza     @relation(fields: [pizzaId], references: [id])
+
+  @@map("order_items")
+}
+
+enum PizzaSize {
+  SMALL
+  MEDIUM
+  LARGE
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PREPARING
+  READY
+  OUT_FOR_DELIVERY
+  DELIVERED
+  CANCELLED
+}
+
+model Payment {
+  id            String    @id @default(cuid())
+  orderId       String    @unique
+  order         Order     @relation(fields: [orderId], references: [id])
+  amount        Decimal   @db.Decimal(10, 2)
+  method        String    @db.VarChar(50)
+  status        String    @db.VarChar(50)
+  transactionId String?   @db.VarChar(100)
+  paidAt        DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@map("payments")
 }
