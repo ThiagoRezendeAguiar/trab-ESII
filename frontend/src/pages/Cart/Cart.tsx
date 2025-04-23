@@ -1,14 +1,15 @@
-import { Box, Center, Flex, Heading, Stack, Text } from "@chakra-ui/react"
-import BackButton from "../../components/BackButton"
+import { Center, Flex, Stack, Text } from "@chakra-ui/react"
 import CardCart from "./components/CardCart"
 
 import image from '../../assets/images/margherita.png'
 import ConfirmButton from "../../components/ConfirmButton"
+import Navbar from "../../components/Navbar"
 
 const Cart = () => {
 
   return (
     <Stack minH="100vh" >
+      <Navbar />
       <Flex 
         direction="row" 
         alignItems="center"
@@ -16,19 +17,7 @@ const Cart = () => {
         width="100%"
         p="30px"
       >
-        {/* Botão alinhado à esquerda */}
-        <Box position="absolute" left={0}>
-          <BackButton url='/' />
-        </Box>
 
-        <Heading 
-          fontSize="30px" 
-          fontWeight="700"
-          textAlign="center"
-          width="100%"  
-        >
-          Cart
-        </Heading>
       </Flex>
       <Center px={{base: "10px", md: "0"}} >
         <Stack 
@@ -65,7 +54,7 @@ const Cart = () => {
           </Flex>
 
           <Center>
-            <ConfirmButton text="Place Order" redirect='/profile' />
+            <ConfirmButton text="Confirm Order" redirect='/profile/confirmation' />
           </Center>
         </Stack>
      </Center>

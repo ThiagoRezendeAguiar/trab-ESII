@@ -1,11 +1,10 @@
-import { Flex, Stack } from "@chakra-ui/react"
+import { Center, Flex, Heading, Stack } from "@chakra-ui/react"
 import ConfirmButton from "../../components/ConfirmButton"
 import { FaEnvelope, FaMap, FaPhoneAlt, FaUser } from "react-icons/fa"
 import FormControl from "../../components/FormControl";
-import Navbar from "../../components/Navbar";
 
 
-const Profile = () => {
+const ProfileConfirmation = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -13,10 +12,17 @@ const Profile = () => {
   };
 
   return (
-    <Stack w="100%"  minH="100vh"  px={{base: '10px', md: 'none'}} gap={20}>
-      <Navbar />
-      <Flex flexDir="column" alignItems="center" gap={10} pt="10px">
-
+    <Stack w="100%" justifyContent="space-between" minH="100vh"  px={{base: '10px', md: 'none'}} py="30px">
+      
+      <Center flexDir="column" gap={70}>
+        <Heading 
+          fontSize="30px" 
+          fontWeight="700"
+          textAlign="center"
+          width="100%"  
+        >
+          User Info
+        </Heading>
         <Stack as="form" onSubmit={handleSubmit} maxW="container.md" w="100%" px={{base: '10px', md: 'none'}} gap={5}>
           <FormControl id="fullName" placeholder="Full name" icon={<FaUser size= '20px' color="orange" />} />
 
@@ -32,16 +38,17 @@ const Profile = () => {
             <FormControl id="zip code" placeholder="ZIP code" />
           </Flex>
 
-          <Flex justifyContent="center" mt={5}>
-            <ConfirmButton text="Save"  type="submit"/>
+          <Flex gap="5" justifyContent="center" mt={20}>
+            <ConfirmButton text="Back to cart" redirect='/cart' whiteMode={true} type="button"/>
+            <ConfirmButton text="Proceed" redirect='/payment'  type="submit"/>
           </Flex>
         </Stack>
        
-      </Flex>
+      </Center>
 
      
     </Stack>
   )
 }
 
-export default Profile
+export default ProfileConfirmation
