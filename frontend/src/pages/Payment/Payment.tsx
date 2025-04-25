@@ -33,7 +33,7 @@ const Payment = () => {
           </Flex>
 
           <Flex gap="5" justifyContent="center" mt={20}>
-            <ConfirmButton text="Back to profile info" redirect='/profile' whiteMode={true} type="button"/>
+            <ConfirmButton text="Back to profile info" redirect='/profile/confirmation' whiteMode={true} type="button"/>
             <ConfirmButton text="Finish" redirect='/'  type="submit"/>
           </Flex>
         </Stack>
