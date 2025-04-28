@@ -26,6 +26,7 @@ model Customer {
   id        String    @id @default(cuid())
   name      String    @db.VarChar(50)
   email     String    @unique @db.VarChar(100)
+  password  String  
   phone     String?   @db.VarChar(20)
   addresses Address[]
   orders    Order[]

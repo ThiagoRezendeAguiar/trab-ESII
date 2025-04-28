@@ -9,6 +9,7 @@ import { AddressController } from "../controller/address.controller";
 import { AddressService } from "../service/address.service";
 import { OrderService } from "../service/order.service";
 import { OrderController } from "../controller/order.controller";
+import { AuthGuard } from "../middlewares/authGuard";
 
 container.register('PrismaClient', {useValue: prisma});
 
@@ -24,5 +25,6 @@ container.register('AddressService', {useClass: AddressService});
 container.register('OrderController', {useClass: OrderController});
 container.register('OrderService', {useClass: OrderService});
 
+container.register('AuthGuard', { useClass: AuthGuard });
 
 export { container };

@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import { CustomerService } from "../service/customer.service";
 import { FastifyReply, FastifyRequest } from "fastify";
-import { CreateCustomerInput, UpdateCustomerInput } from "../model/customer.model";
+import { CreateCustomerInput, LoginCustomerInput, UpdateCustomerInput } from "../model/customer.model";
 
 @injectable()
 export class CustomerController {
@@ -10,6 +10,11 @@ export class CustomerController {
     async createCustomer(request: FastifyRequest<{ Body: CreateCustomerInput }>, reply: FastifyReply) {
         const newCustomer = await this.customerService.create(request.body);
         reply.status(201).send(newCustomer);
+    }
+
+    async loginCustomer(request: FastifyRequest<{ Body: LoginCustomerInput }>, reply: FastifyReply) {
+        const loginCostumer = await this.customerService.findFirst(request.body);
+        reply.status(200).send(loginCostumer);
     }
 
     async getCustomers(request: FastifyRequest, reply: FastifyReply) {
