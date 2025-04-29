@@ -2,15 +2,16 @@ import { FastifyRequest, FastifyReply } from "fastify";
 import { PrismaClient, Customer } from "@prisma/client";
 import { inject, injectable } from "tsyringe";
 import jwt from "jsonwebtoken";
+import { IParams } from "../@types/fastify";
 
-@injectable() // Decorador para permitir injeção
+@injectable()
 export class AuthGuard {
   constructor(
-    @inject('PrismaClient') private prisma: PrismaClient // Injeção do Prisma
+    @inject('PrismaClient') private prisma: PrismaClient
   ) {}
 
   async execute(
-    request: FastifyRequest,
+    request: FastifyRequest< { Params: IParams } >,
     reply: FastifyReply,
     done: () => void
   ) {
@@ -22,10 +23,10 @@ export class AuthGuard {
     }
 
     try {
-      const verified = jwt.verify(token, process.env.JWT_SECRET as string) as { id: string };
+      const verified = jwt.verify(token, process.env.JWT_SECRET as string) as { sub: string };
 
       const user = await this.prisma.customer.findUnique({ 
-        where: { id: verified.id },
+        where: { id: verified.sub },
         select: {
           id: true,
           name: true,
@@ -41,7 +42,7 @@ export class AuthGuard {
       }
 
       request.customer = user;
-      done();
+      return;
 
     } catch (error) {
       return reply.status(401).send({ errors: ["Token inválido."] });

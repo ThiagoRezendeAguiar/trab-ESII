@@ -2,6 +2,7 @@ import { inject, injectable } from "tsyringe";
 import { CustomerService } from "../service/customer.service";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { CreateCustomerInput, LoginCustomerInput, UpdateCustomerInput } from "../model/customer.model";
+import { IParams } from "../@types/fastify";
 
 @injectable()
 export class CustomerController {
@@ -19,24 +20,24 @@ export class CustomerController {
 
     async getCustomers(request: FastifyRequest, reply: FastifyReply) {
         const customers = await this.customerService.findAll();
-        reply.send(customers);
+        return reply.status(200).send(customers);
     }
 
-    async getCustomerById(request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) {
+    async getCustomerById(request: FastifyRequest<{ Params: IParams }>, reply: FastifyReply) {
         const { id } = request.params;
         const customer = await this.customerService.findById(id);
         reply.send(customer);
     }
 
     async updateCustomer(
-        request: FastifyRequest<{ Params: { id: string }; Body: UpdateCustomerInput }>, reply: FastifyReply
+        request: FastifyRequest<{ Params: IParams; Body: UpdateCustomerInput }>, reply: FastifyReply
     ) {
         const { id } = request.params;
         const updatedCustomer = await this.customerService.update(id, request.body);
         reply.send(updatedCustomer);
     }
 
-    async deleteCustomer(request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) {
+    async deleteCustomer(request: FastifyRequest<{ Params: IParams }>, reply: FastifyReply) {
         const { id } = request.params;
         await this.customerService.delete(id);
         reply.status(204).send();
