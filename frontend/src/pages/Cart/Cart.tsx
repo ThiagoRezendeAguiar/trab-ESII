@@ -6,8 +6,8 @@ import Navbar from "../../components/Navbar";
 
 const Cart = () => {
   return (
-    <Stack minH="100vh">
-      <Navbar />
+    <Stack minH="100vh" bg="#F1F1F1">
+      <Navbar isAuthenticated={true} />
       <Flex
         direction="row"
         alignItems="center"

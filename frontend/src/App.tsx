@@ -1,16 +1,20 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import Cart from "./pages/Cart/Cart";
 import Payment from "./pages/Payment/Payment";
 import ProfileConfirmation from "./pages/ProfileConfirmation/ProfileConfirmation";
-import ProductDetail from './pages/ProductDetail/ProductDetail';
-import Profile from './pages/Profile/Profile';
+import ProductDetail from "./pages/ProductDetail/ProductDetail";
+import Profile from "./pages/Profile/Profile";
+import Register from "./pages/Register/Register";
+import Login from "./pages/Login/Login";
 
 function App() {
   return (
-    
     <BrowserRouter>
       <Routes>
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+
         <Route path="/" element={<Home />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/cart" element={<Cart />} />

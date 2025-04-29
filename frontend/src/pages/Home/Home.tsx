@@ -39,7 +39,7 @@ const Home = () => {
 
   return (
     <Stack direction="column" minH="100vh" w="100%" bg="#F1F1F1">
-      <Navbar />
+      <Navbar isAuthenticated={ true } />
       <Stack
         justifyContent="center"
         alignItems="center"

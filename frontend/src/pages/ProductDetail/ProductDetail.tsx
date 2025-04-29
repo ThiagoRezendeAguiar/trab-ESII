@@ -69,7 +69,7 @@ const ProductDetail = () => {
   }
 
   return (
-    <Stack mb="20px">
+    <Stack mb="20px" gap="7">
       <Stack
         direction="row"
         alignItems="center"
@@ -81,7 +81,7 @@ const ProductDetail = () => {
         <Heading margin="0 auto">{pizza?.name}</Heading>
       </Stack>
 
-      <Stack alignItems="center">
+      <Stack alignItems="center" gap="5">
         <Image
           src={img}
           alt={id} // Id como nome do produto
