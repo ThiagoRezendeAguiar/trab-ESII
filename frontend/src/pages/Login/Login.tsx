@@ -3,10 +3,41 @@ import FormControl from "../../components/FormControl";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import ConfirmButton from "../../components/ConfirmButton";
 import Navbar from "../../components/Navbar";
+import { useState } from "react";
+import { LoginCustomerInput } from "../../interfaces/Customer";
+import api from "../../services/api";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const handleSubmit = (e: React.FormEvent) => {
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const loginData = {
+      email,
+      password,
+    } as LoginCustomerInput;
+
+    const userLogin = await loginCustomer(loginData)
+
+    console.log(userLogin);
+    if (userLogin) {
+      navigate("/");
+    }
+  };
+
+  const loginCustomer = async (loginData: LoginCustomerInput) => {
+    try {
+      const response = await api.post("/customer/login", loginData);
+      return response.data;
+    } catch (error) {
+      console.error("Error while creating customer:", error);
+      throw error;
+    }
   };
 
   return (
@@ -37,20 +68,24 @@ const Login = () => {
             gap={5}
           >
             <FormControl
-              id="emailRegister"
+              id="emailLogin"
               placeholder="E-mail"
               type="email"
               icon={<FaEnvelope size="20px" color="orange" />}
+              onChange={(e) => setEmail(e.target.value)}
+              value={email || ""}
             />
 
             <FormControl
-              id="passwordRegister"
+              id="passwordLogin"
               type="password"
               placeholder="Password"
               icon={<FaLock size="20px" color="orange" />}
+              onChange={(e) => setPassword(e.target.value)}
+              value={password || ""}
             />
             <Flex gap="5" justifyContent="center" mt={20}>
-              <ConfirmButton text="Login" redirect="/" type="submit" />
+              <ConfirmButton text="Login" type="submit" />
             </Flex>
           </Stack>
         </Center>

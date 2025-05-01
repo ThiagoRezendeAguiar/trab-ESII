@@ -13,12 +13,11 @@ const Profile = () => {
     <Stack
       w="100%"
       minH="100vh"
-      px={{ base: "10px", md: "none" }}
       gap={20}
       bg="#F1F1F1"
     >
       <Navbar isAuthenticated={true} />
-      <Flex flexDir="column" alignItems="center" gap={10} pt="10px">
+      <Flex flexDir="column" alignItems="center" gap={10} pt="10px"       px={{ base: "10px", md: "none" }}>
         <Stack
           as="form"
           onSubmit={handleSubmit}

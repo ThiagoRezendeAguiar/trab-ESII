@@ -11,10 +11,12 @@ type FormControlProps = {
   placeholder: string;
   type?: string;
   icon?: React.ReactNode;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  value?: string;
 };
 
 const FormControl: React.FC<FormControlProps> = (props: FormControlProps) => {
-  const { id, placeholder, type, icon } = props;
+  const { id, placeholder, type, icon, onChange, value } = props;
 
   return (
     <DefaultFormControl isRequired>
@@ -29,13 +31,16 @@ const FormControl: React.FC<FormControlProps> = (props: FormControlProps) => {
             id={id}
             placeholder={placeholder}
             type={type}
-            bg="gray.100"
+            bg="gray.200"
+
             _hover={{ bg: "gray.50" }}
             _focus={{
               bg: "white",
             }}
             size="md"
             variant="filled"
+            onChange={onChange}
+            value={value}
           />
         </Box>
       </Flex>

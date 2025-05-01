@@ -3,16 +3,75 @@ import FormControl from "../../components/FormControl";
 import { FaEnvelope, FaLock, FaMap, FaPhoneAlt, FaUser } from "react-icons/fa";
 import ConfirmButton from "../../components/ConfirmButton";
 import Navbar from "../../components/Navbar";
+import { useState } from "react";
+import { CreateCustomerInput } from "../../interfaces/Customer";
+import api from "../../services/api";
+import { CreateAddressInput } from "../../interfaces/Address";
 
 const Register = () => {
-  const handleSubmit = (e: React.FormEvent) => {
+  const [name, setName] = useState<string>("");
+  const [phone, setPhone] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+  const [address, setAddress] = useState<string>("");
+  const [city, setCity] = useState<string>("");
+  const [state, setState] = useState<string>("");
+  const [zip, setZip] = useState<string>("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted");
+    const customer = {
+      name,
+      phone,
+      email,
+      password,
+    } as CreateCustomerInput;
+    const newCustomer = await createCustomer(customer);
+    const customerId = newCustomer.id;
+    const newAddress = {
+      street: address,
+      city,
+      state,
+      zipCode: zip,
+      number: "",
+      district: "",
+      complement: "",
+      isDefault: false,
+    } as CreateAddressInput;
+
+    await createAddress(customerId, newAddress);
+  };
+
+  const createCustomer = async (customer: CreateCustomerInput) => {
+    try {
+      const response = await api.post("/customer/register", customer);
+      return response.data;
+    } catch (error) {
+      console.error("Error while creating customer:", error);
+      throw error;
+    }
+  };
+
+  const createAddress = async (
+    customerId: string,
+    address: CreateAddressInput
+  ) => {
+    try {
+      const response = await api.post(
+        `/customer/${customerId}/addresses`,
+        address
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error while creating address:", error);
+      throw error;
+    }
   };
 
   return (
     <Stack direction="column" minH="100vh" w="100%" bg="#F1F1F1">
-      <Navbar isAuthenticated={ false }/>
+      <Navbar isAuthenticated={false} />
       <Stack
         w="100%"
         justifyContent="space-between"
@@ -40,6 +99,8 @@ const Register = () => {
             <FormControl
               id="nameRegister"
               placeholder="Full name"
+              onChange={(e) => setName(e.target.value)}
+              value={name || ""}
               icon={<FaUser size="20px" color="orange" />}
             />
 
@@ -47,6 +108,8 @@ const Register = () => {
               id="phoneRegister"
               placeholder="Phone number"
               type="tel"
+              onChange={(e) => setPhone(e.target.value)}
+              value={phone || ""}
               icon={<FaPhoneAlt size="20px" color="orange" />}
             />
 
@@ -54,6 +117,8 @@ const Register = () => {
               id="emailRegister"
               placeholder="E-mail"
               type="email"
+              onChange={(e) => setEmail(e.target.value)}
+              value={email || ""}
               icon={<FaEnvelope size="20px" color="orange" />}
             />
 
@@ -61,6 +126,8 @@ const Register = () => {
               id="passwordRegister"
               placeholder="Create password"
               type="password"
+              onChange={(e) => setPassword(e.target.value)}
+              value={password || ""}
               icon={<FaLock size="20px" color="orange" />}
             />
 
@@ -68,19 +135,33 @@ const Register = () => {
               id="addressRegister"
               placeholder="Address"
               icon={<FaMap size="20px" color="orange" />}
+              onChange={(e) => setAddress(e.target.value)}
+              value={address || ""}
             />
 
             <Flex gap={2} pl="36px">
-              <FormControl id="city" placeholder="City" />
-              <FormControl id="state" placeholder="State" />
-              <FormControl id="zip code" placeholder="ZIP code" />
+              <FormControl
+                id="city"
+                placeholder="City"
+                onChange={(e) => setCity(e.target.value)}
+                value={city || ""}
+              />
+              <FormControl
+                id="state"
+                placeholder="State"
+                onChange={(e) => setState(e.target.value)}
+                value={state || ""}
+              />
+              <FormControl
+                id="zip code"
+                placeholder="ZIP code"
+                onChange={(e) => setZip(e.target.value)}
+                value={zip || ""}
+              />
             </Flex>
 
             <Flex gap="5" justifyContent="center" mt={20}>
-              <ConfirmButton
-                text="Create Account"
-                type="submit"
-              />
+              <ConfirmButton text="Create Account" type="submit" />
             </Flex>
           </Stack>
         </Center>
