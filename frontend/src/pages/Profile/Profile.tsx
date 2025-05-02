@@ -9,10 +9,13 @@ import api from "../../services/api";
 import { jwtDecode } from "jwt-decode";
 import { useAuth } from "../../hooks/useAuth";
 import { JwtPayload } from "../../interfaces/JwtPayload";
-
-
+import { UpdateCustomerInput } from "../../interfaces/Customer";
+import { UpdateAddressInput } from "../../interfaces/Address";
 
 const Profile = () => {
+  const [userId, setUserId] = useState<string>("");
+  const [addressId, setAddressId] = useState<string>("");
+
   const [name, setName] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -23,12 +26,12 @@ const Profile = () => {
   const [zip, setZip] = useState<string>("");
 
   const auth = useAuth();
-  
-    if (!auth) {
-      return <div>Carregando...</div>; 
-    }
-  
-    const { logout } = auth;
+
+  if (!auth) {
+    return <div>Carregando...</div>;
+  }
+
+  const { logout } = auth;
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -41,10 +44,10 @@ const Profile = () => {
 
         const decoded = jwtDecode<JwtPayload>(token);
         const userId = decoded.sub;
+        setUserId(userId);
 
         handleGetUser(userId);
         handleGetAddress(userId);
-
       } catch (error) {
         console.error("Erro ao buscar pizzas:", error);
       }
@@ -65,15 +68,62 @@ const Profile = () => {
     const response = await api.get(`/customer/${userId}/addresses`);
 
     const firstAddress = response.data[0] || {};
-    
+
+    if (firstAddress.id) {
+      setAddressId(firstAddress.id);
+    }
+
     setAddress(firstAddress.street);
     setCity(firstAddress.city);
     setState(firstAddress.state);
     setZip(firstAddress.zipCode);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const customer = {
+      name,
+      phone,
+      email,
+    } as UpdateCustomerInput;
+
+    await updateCustomer(customer);
+
+    const newAddress = {
+      street: address,
+      city,
+      state,
+      zipCode: zip,
+      number: "",
+      district: "",
+      complement: "",
+      isDefault: false,
+    } as UpdateAddressInput;
+
+    await updateAddress(newAddress);
+  };
+
+  const updateCustomer = async (customer: UpdateCustomerInput) => {
+    try {
+      const response = await api.put(`/customer/${userId}`, customer);
+      return response.data;
+    } catch (error) {
+      console.error("Error while creating customer:", error);
+      throw error;
+    }
+  };
+
+  const updateAddress = async (address: UpdateAddressInput) => {
+    try {
+      const response = await api.put(
+        `/customer/${userId}/addresses/${addressId}`,
+        address
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error while creating address:", error);
+      throw error;
+    }
   };
 
   return (
@@ -150,8 +200,13 @@ const Profile = () => {
           </Flex>
 
           <Flex gap="5" justifyContent="center" mt={20}>
-            <ConfirmButton text="Logout" action={() => logout()} whiteMode={true} type="button"/>
-            <ConfirmButton text="Save" type="submit"/>
+            <ConfirmButton
+              text="Logout"
+              action={() => logout()}
+              whiteMode={true}
+              type="button"
+            />
+            <ConfirmButton text="Save" type="submit" />
           </Flex>
         </Stack>
       </Flex>
