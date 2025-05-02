@@ -77,7 +77,7 @@ const ProductDetail = () => {
         status: "warning",
         duration: 3000,
         isClosable: true,
-        position: "top",
+        position: "top-right",
       });
       return;
     }
@@ -110,7 +110,7 @@ const ProductDetail = () => {
       status: "success",
       duration: 3000,
       isClosable: true,
-      position: "top",
+      position: "top-right",
     });
   };
 
@@ -127,7 +127,7 @@ const ProductDetail = () => {
         <Heading margin="0 auto">{pizza?.name}</Heading>
       </Stack>
 
-      {/* Envolvendo o conteúdo em um form para capturar o submit */}
+      
       <form onSubmit={handleSubmit}>
         <Stack alignItems="center" gap="5">
           <Image
