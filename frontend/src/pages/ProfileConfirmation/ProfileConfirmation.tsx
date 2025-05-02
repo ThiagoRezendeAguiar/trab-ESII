@@ -1,4 +1,4 @@
-import { Box, Center, Flex, Heading, Stack } from "@chakra-ui/react";
+import { Box, Center, Flex, Heading, Stack, useToast } from "@chakra-ui/react";
 import ConfirmButton from "../../components/ConfirmButton";
 import { FaEnvelope, FaMap, FaPhoneAlt, FaUser } from "react-icons/fa";
 import FormControl from "../../components/FormControl";
@@ -8,6 +8,8 @@ import { jwtDecode } from "jwt-decode";
 import { JwtPayload } from "../../interfaces/JwtPayload";
 
 const ProfileConfirmation = () => {
+  const toast = useToast();
+
   const [name, setName] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -18,7 +20,6 @@ const ProfileConfirmation = () => {
   const [city, setCity] = useState<string>("");
   const [state, setState] = useState<string>("");
   const [zip, setZip] = useState<string>("");
-
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -65,6 +66,14 @@ const ProfileConfirmation = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    toast({
+      title: "Info confirmed!",
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+      position: "top-right",
+    });
   };
 
   return (
@@ -82,7 +91,7 @@ const ProfileConfirmation = () => {
           textAlign="center"
           width="100%"
         >
-         Info
+          Info
         </Heading>
         <Stack
           as="form"
@@ -118,7 +127,7 @@ const ProfileConfirmation = () => {
             icon={<FaEnvelope size="20px" color="orange" />}
           />
 
-<Flex
+          <Flex
             width="100%"
             flexDir={{ base: "column", md: "row" }}
             gap={{ base: 5, md: 2 }}

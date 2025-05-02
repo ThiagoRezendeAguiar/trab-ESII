@@ -1,4 +1,4 @@
-import { Box, Flex, Stack } from "@chakra-ui/react";
+import { Box, Flex, Stack, useToast } from "@chakra-ui/react";
 import ConfirmButton from "../../components/ConfirmButton";
 import { FaEnvelope, FaMap, FaPhoneAlt, FaUser } from "react-icons/fa";
 import FormControl from "../../components/FormControl";
@@ -13,6 +13,7 @@ import { UpdateCustomerInput } from "../../interfaces/Customer";
 import { UpdateAddressInput } from "../../interfaces/Address";
 
 const Profile = () => {
+  const toast = useToast();
   const [userId, setUserId] = useState<string>("");
   const [addressId, setAddressId] = useState<string>("");
 
@@ -105,6 +106,14 @@ const Profile = () => {
     } as UpdateAddressInput;
 
     await updateAddress(newAddress);
+
+    toast({
+      title: "Info confirmed!",
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+      position: "top-right",
+    });
   };
 
   const updateCustomer = async (customer: UpdateCustomerInput) => {

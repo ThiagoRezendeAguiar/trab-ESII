@@ -6,7 +6,7 @@ import CardHome from "./components/CardHome";
 
 import pizzaImg from "../../assets/images/margherita.png";
 import { useEffect, useState } from "react";
-import { Product } from "../../interfaces/Product";
+import { Product } from "../../interfaces/Pizza";
 
 import api from "../../services/api";
 

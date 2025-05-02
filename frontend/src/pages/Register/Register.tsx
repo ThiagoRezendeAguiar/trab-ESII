@@ -1,4 +1,4 @@
-import { Box, Center, Flex, Heading, Stack } from "@chakra-ui/react";
+import { Box, Center, Flex, Heading, Stack, useToast } from "@chakra-ui/react";
 import FormControl from "../../components/FormControl";
 import { FaEnvelope, FaLock, FaMap, FaPhoneAlt, FaUser } from "react-icons/fa";
 import ConfirmButton from "../../components/ConfirmButton";
@@ -9,6 +9,8 @@ import api from "../../services/api";
 import { CreateAddressInput } from "../../interfaces/Address";
 
 const Register = () => {
+  const toast = useToast();
+
   const [name, setName] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -21,35 +23,126 @@ const Register = () => {
   const [state, setState] = useState<string>("");
   const [zip, setZip] = useState<string>("");
 
+  const validateForm = () => {
+    if (!name || !phone || !email || !password) {
+      toast({
+        title: "Incomplete fields",
+        description: "Please, complete all personal fields.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
+      return false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast({
+        title: "Invalid email",
+        description: "Please, enter a valid email address.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
+      return false;
+    }
+
+    if (password.length < 5) {
+      toast({
+        title: "Password too short",
+        description: "Your password must have at least 5 characters.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
+      return false;
+    }
+
+    if (!street || !number || !district || !city || !state || !zip) {
+      toast({
+        title: "Incomplete address",
+        description: "Please, complete all address fields.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
+      return false;
+    }
+
+    return true;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const customer = {
-      name,
-      phone,
-      email,
-      password,
-    } as CreateCustomerInput;
-    const newCustomer = await createCustomer(customer);
-    const customerId = newCustomer.id;
-    const newAddress = {
-      street,
-      city,
-      state,
-      zipCode: zip,
-      number: number,
-      district: district,
-      complement: "",
-      isDefault: false,
-    } as CreateAddressInput;
 
-    await createAddress(customerId, newAddress);
+    if (!validateForm()) {
+      return;
+    }
+
+    try {
+      const customer = {
+        name,
+        phone,
+        email,
+        password,
+      } as CreateCustomerInput;
+
+      const newCustomer = await createCustomer(customer);
+      const customerId = newCustomer.id;
+
+      const newAddress = {
+        street,
+        city,
+        state,
+        zipCode: zip,
+        number: number,
+        district: district,
+        complement: "",
+        isDefault: true,
+      } as CreateAddressInput;
+
+      await createAddress(customerId, newAddress);
+
+      toast({
+        title: "Your account was created!",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Erro ao criar conta",
+        description:
+          error.response?.data?.message ||
+          "Ocorreu um erro ao processar seu cadastro.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
+    }
   };
 
   const createCustomer = async (customer: CreateCustomerInput) => {
     try {
       const response = await api.post("/customer/register", customer);
       return response.data;
-    } catch (error) {
+    } catch (error: any) {
+      if (error.response?.status === 409) {
+        toast({
+          title: "Email já cadastrado",
+          description: "Este email já está sendo utilizado por outra conta.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "top",
+        });
+      }
       console.error("Error while creating customer:", error);
       throw error;
     }
@@ -141,7 +234,7 @@ const Register = () => {
               <Box flex="2">
                 <FormControl
                   id="streetRegister"
-                  placeholder="street"
+                  placeholder="Street"
                   icon={<FaMap size="20px" color="orange" />}
                   onChange={(e) => setStreet(e.target.value)}
                   value={street || ""}
