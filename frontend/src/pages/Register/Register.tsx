@@ -1,4 +1,4 @@
-import { Center, Flex, Heading, Stack } from "@chakra-ui/react";
+import { Box, Center, Flex, Heading, Stack } from "@chakra-ui/react";
 import FormControl from "../../components/FormControl";
 import { FaEnvelope, FaLock, FaMap, FaPhoneAlt, FaUser } from "react-icons/fa";
 import ConfirmButton from "../../components/ConfirmButton";
@@ -14,7 +14,9 @@ const Register = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const [address, setAddress] = useState<string>("");
+  const [street, setStreet] = useState<string>("");
+  const [number, setNumber] = useState<string>("");
+  const [district, setDistrict] = useState<string>("");
   const [city, setCity] = useState<string>("");
   const [state, setState] = useState<string>("");
   const [zip, setZip] = useState<string>("");
@@ -30,12 +32,12 @@ const Register = () => {
     const newCustomer = await createCustomer(customer);
     const customerId = newCustomer.id;
     const newAddress = {
-      street: address,
+      street,
       city,
       state,
       zipCode: zip,
-      number: "",
-      district: "",
+      number: number,
+      district: district,
       complement: "",
       isDefault: false,
     } as CreateAddressInput;
@@ -131,13 +133,37 @@ const Register = () => {
               icon={<FaLock size="20px" color="orange" />}
             />
 
-            <FormControl
-              id="addressRegister"
-              placeholder="Address"
-              icon={<FaMap size="20px" color="orange" />}
-              onChange={(e) => setAddress(e.target.value)}
-              value={address || ""}
-            />
+            <Flex
+              width="100%"
+              flexDir={{ base: "column", md: "row" }}
+              gap={{ base: 5, md: 2 }}
+            >
+              <Box flex="2">
+                <FormControl
+                  id="streetRegister"
+                  placeholder="street"
+                  icon={<FaMap size="20px" color="orange" />}
+                  onChange={(e) => setStreet(e.target.value)}
+                  value={street || ""}
+                />
+              </Box>
+
+              <Flex flex="2" gap={2} pl={{ base: "36px", md: 0 }}>
+                <FormControl
+                  id="districtRegister"
+                  placeholder="District"
+                  onChange={(e) => setDistrict(e.target.value)}
+                  value={district || ""}
+                />
+
+                <FormControl
+                  id="numberRegister"
+                  placeholder="Number"
+                  onChange={(e) => setNumber(e.target.value)}
+                  value={number || ""}
+                />
+              </Flex>
+            </Flex>
 
             <Flex gap={2} pl="36px">
               <FormControl

@@ -21,7 +21,10 @@ const ConfirmButton: React.FC<ButtonProps> = (props: ButtonProps) => {
       w="90%"
       bg={whiteMode ? "#fff" : "#000"}
       color={whiteMode ? "#000" : "#fff"}
-      border={whiteMode ? "2px solid #000" : "none"}
+      _hover={
+        whiteMode ? {bg: "#000", color: "#fff"} : {bg: "#fff", color: "#000"}
+      }
+      border={"2px solid #000"}
       fontWeight={600}
       p="10px"
       {...(redirect && { onClick: () => navigate(redirect) })}
