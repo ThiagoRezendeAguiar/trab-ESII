@@ -4,12 +4,13 @@ import { useNavigate } from "react-router-dom";
 type ButtonProps = {
   text: string;
   redirect?: string;
+  action?: () => void;
   type?: "button" | "submit" | "reset";
   whiteMode?: boolean;
 };
 
 const ConfirmButton: React.FC<ButtonProps> = (props: ButtonProps) => {
-  const { text, redirect, type, whiteMode } = props;
+  const { text, redirect, type, whiteMode, action } = props;
 
   const navigate = useNavigate();
 
@@ -24,6 +25,7 @@ const ConfirmButton: React.FC<ButtonProps> = (props: ButtonProps) => {
       fontWeight={600}
       p="10px"
       {...(redirect && { onClick: () => navigate(redirect) })}
+      {...(action && { onClick: action })}
       type={type}
     >
       {text}

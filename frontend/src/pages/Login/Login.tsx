@@ -7,12 +7,21 @@ import { useState } from "react";
 import { LoginCustomerInput } from "../../interfaces/Customer";
 import api from "../../services/api";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
 
 const Login = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
   const navigate = useNavigate();
+
+  const auth = useAuth();
+
+  if (!auth) {
+    return <div>Carregando...</div>; 
+  }
+
+  const { login } = auth;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,7 +31,7 @@ const Login = () => {
       password,
     } as LoginCustomerInput;
 
-    const userLogin = await loginCustomer(loginData)
+    const userLogin = await handleLogin(loginData);
 
     console.log(userLogin);
     if (userLogin) {
@@ -30,9 +39,10 @@ const Login = () => {
     }
   };
 
-  const loginCustomer = async (loginData: LoginCustomerInput) => {
+  const handleLogin = async (loginData: LoginCustomerInput) => {
     try {
       const response = await api.post("/customer/login", loginData);
+      login(response.data.token);
       return response.data;
     } catch (error) {
       console.error("Error while creating customer:", error);
