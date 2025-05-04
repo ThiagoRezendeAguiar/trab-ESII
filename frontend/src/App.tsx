@@ -10,6 +10,7 @@ import Login from "./pages/Login/Login";
 
 import { AuthProvider, useAuth } from "./hooks/useAuth";
 import { JSX, useEffect, useState } from "react";
+import DeliveryTracking from "./pages/DeliveryTracking/DeliveryTracking";
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const auth = useAuth();
@@ -140,6 +141,14 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
+      <Route
+path="/delivery-tracking"
+element={
+  <ProtectedRoute>
+    <DeliveryTracking />
+  </ProtectedRoute>
+}
+/>
 
       <Route path="*" element={<h1>404 - Página não encontrada</h1>} />
     </Routes>

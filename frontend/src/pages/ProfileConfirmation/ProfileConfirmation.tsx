@@ -6,10 +6,11 @@ import { useEffect, useState } from "react";
 import api from "../../services/api";
 import { jwtDecode } from "jwt-decode";
 import { JwtPayload } from "../../interfaces/JwtPayload";
+import { useNavigate } from 'react-router-dom';
 
 const ProfileConfirmation = () => {
   const toast = useToast();
-
+  const navigate = useNavigate();
   const [name, setName] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -187,6 +188,12 @@ const ProfileConfirmation = () => {
               whiteMode={true}
               type="button"
             />
+             <Center mt={4}>
+      <ConfirmButton 
+        text="Acompanhar Entrega" 
+        action={() => navigate('/delivery-tracking')} 
+      />
+    </Center>
             <ConfirmButton text="Proceed" redirect="/payment" type="submit" />
           </Flex>
         </Stack>
