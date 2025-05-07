@@ -1,0 +1,26 @@
+{
+    "name": "pizza-app",
+    "version": "1.0.0",
+    "description": "Aplicativo de Pizzaria para Projeto de Faculdade",
+    "scripts": {
+      "install:backend": "cd backend && npm install",
+      "install:frontend": "cd frontend && npm install",
+      "install:all": "npm install && npm run install:backend && npm run install:frontend",
+     
+      "setup:db": "cd backend && npm run setup:db",
+     
+      "dev:backend": "cd backend && npm run dev",
+      "dev:frontend": "cd frontend && npm run dev",
+      "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+     
+      "start:backend": "cd backend && npm run start",
+      "start:frontend": "cd frontend && npm run start",
+      "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
+     
+      "setup:all": "npm run install:all && npm run setup:db",
+      "start:fresh": "npm run setup:all && npm run start"
+    },
+    "devDependencies": {
+      "concurrently": "^8.2.2"
+    }
+    }
