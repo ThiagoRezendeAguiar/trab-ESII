@@ -11,23 +11,26 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
-import { useParams } from "react-router-dom";
+import { useParams ,useNavigate} from "react-router-dom";
 import img from "../../assets/images/margherita.png";
+
 import { FaMinus, FaPlus } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import ConfirmButton from "../../components/ConfirmButton";
 import BackButton from "../../components/BackButton";
 import api from "../../services/api";
-import { Pizza } from "../../interfaces/Pizza";
-
+import { Product } from "../../interfaces/Pizza";
+import { useCart } from '../../contexts/CartContext';
 const ProductDetail = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const toast = useToast();
-
+  
+  const { addItem } = useCart();
   const [amount, setAmount] = useState<number>(1);
-  const [pizza, setPizza] = useState<Pizza | null>(null);
+  const [pizza, setPizza] = useState<Product | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [size, setSize] = useState<string>("");
+  const [size, setSize] = useState<string>("medium");
 
   const handleSum = () => {
     if (amount >= 50) {
@@ -70,7 +73,7 @@ const ProductDetail = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
+  
     if (!size) {
       toast({
         title: "Select a size",
@@ -81,37 +84,42 @@ const ProductDetail = () => {
       });
       return;
     }
-    let finalPrice = 0;
-    if (pizza) {
-      switch (size) {
-        case "Small":
-          finalPrice = pizza.price * 0.8;
-          break;
-        case "Medium":
-          finalPrice = pizza.price;
-          break;
-        case "Large":
-          finalPrice = pizza.price * 1.2;
-          break;
-      }
-    }
-
-    finalPrice = finalPrice * amount;
     
-    console.log("Pedido enviado:");
-    console.log("- Produto:", pizza?.name);
-    console.log("- Tamanho:", size);
-    console.log("- Quantidade:", amount);
-    console.log("- Preço total:", finalPrice.toFixed(2));
+    if (!pizza) return;
+    
+    let finalPrice = 0;
+    switch (size) {
+      case "Small":
+        finalPrice = pizza.price * 0.8;
+        break;
+      case "Medium":
+        finalPrice = pizza.price;
+        break;
+      case "Large":
+        finalPrice = pizza.price * 1.2;
+        break;
+    }
+  
+    // Adicionar ao carrinho
+    addItem({
+      id: pizza.id,
+      name: pizza.name,
+      price: finalPrice,
+      quantity: amount,
+      size: size as 'Small' | 'Medium' | 'Large',
+      image: img,
+    });
     
     toast({
       title: "Product added to cart",
-      description: `${amount}x ${pizza?.name} (${size})`,
+      description: `${amount}x ${pizza.name} (${size})`,
       status: "success",
       duration: 3000,
       isClosable: true,
       position: "top-right",
     });
+    
+ 
   };
 
   return (

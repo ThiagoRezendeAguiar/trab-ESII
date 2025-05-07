@@ -7,7 +7,7 @@ import ProductDetail from "./pages/ProductDetail/ProductDetail";
 import Profile from "./pages/Profile/Profile";
 import Register from "./pages/Register/Register";
 import Login from "./pages/Login/Login";
-
+import { CartProvider } from "./contexts/CartContext";
 import { AuthProvider, useAuth } from "./hooks/useAuth";
 import { JSX, useEffect, useState } from "react";
 import DeliveryTracking from "./pages/DeliveryTracking/DeliveryTracking";
@@ -158,9 +158,11 @@ element={
 function App() {
   return (
     <AuthProvider>
+      <CartProvider>
       <BrowserRouter>
         <AppRoutes />
       </BrowserRouter>
+      </CartProvider>
     </AuthProvider>
   );
 }

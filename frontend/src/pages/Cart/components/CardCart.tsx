@@ -1,26 +1,37 @@
 import { Button, Card, CardBody, CardFooter, Heading, Image, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Stack, Text } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
+import { useCart } from "../../../contexts/CartContext";
 
 type CardCartProps = {
-    id: string;
-    image: string;
-    name: string;
-    price: number;
-    initAmount: number;
-    size: string;
+  id: string;
+  image: string;
+  name: string;
+  price: number;
+  initAmount: number;
+  size: string;
 }
 
 const CardCart: React.FC<CardCartProps> = (props: CardCartProps) => {
+  const { image, name, price, initAmount, size, id } = props;
+  const { updateQuantity, removeItem } = useCart();
+  const [amount, setAmount] = useState<number>(initAmount);
 
-    const { image, name, price, initAmount, size } = props;
-
-    const [amount, setAmount] = useState<number>(initAmount);
-
-    const calculatePrice = () => {
-        const totalPrice = price * amount;
-        return totalPrice.toFixed(2);
+  // Atualizar quantidade no carrinho quando mudar localmente
+  useEffect(() => {
+    if (amount !== initAmount) {
+      updateQuantity(id, size, amount);
     }
+  }, [amount, id, size, initAmount, updateQuantity]);
+
+  const calculatePrice = () => {
+      const totalPrice = price * amount;
+      return totalPrice.toFixed(2);
+  }
+
+  const handleDelete = () => {
+    removeItem(id, size);
+  }
 
   return (
     <Card
@@ -45,7 +56,7 @@ const CardCart: React.FC<CardCartProps> = (props: CardCartProps) => {
             <Heading size='md' color="secondary">{name}</Heading>
 
             <Text py='1' color="#959595" fontWeight="500" fontSize='md'>
-               Size: {size}
+              Size: {size}
             </Text>
             </CardBody>
 
@@ -54,7 +65,7 @@ const CardCart: React.FC<CardCartProps> = (props: CardCartProps) => {
                     <Text color="#959595" fontWeight="400">Quantity</Text>
                     <NumberInput 
                         value={amount} 
-                        onChange={(valueString) => setAmount(parseInt(valueString || '0'))}
+                        onChange={(valueString) => setAmount(parseInt(valueString || '1'))}
                         min={1} 
                         max={50} 
                         maxW="100px"
@@ -67,7 +78,7 @@ const CardCart: React.FC<CardCartProps> = (props: CardCartProps) => {
                     </NumberInput>
 
                     <Button 
-                        onClick={() => (console.log('Delete card'))}
+                        onClick={handleDelete}
                         bg="none"
                         _hover={{opacity: 0.8}}
                         px="10px"

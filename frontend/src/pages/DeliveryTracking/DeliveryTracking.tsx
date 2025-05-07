@@ -9,7 +9,7 @@ import { JwtPayload } from '../../interfaces/JwtPayload';
 
 const DeliveryTracking: React.FC = () => {
 const [customerAddress, setCustomerAddress] = useState<string>('');
-const [storeAddress] = useState<string>('Rua Marechal Deodoro, 245, Xique-Xique, Bahia'); // Endereço fixo da pizzaria
+const [storeAddress] = useState<string>('Rua Cláudio Manoel, 1124, Belo Horizonte, Minas Gerais'); 
 const [isLoading, setIsLoading] = useState<boolean>(true);
 const [userId, setUserId] = useState<string>('');
 

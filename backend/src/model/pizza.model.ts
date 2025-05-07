@@ -5,6 +5,7 @@ export interface Pizza {
     price: number;
     ingredients: string[];
     isAvailable: boolean;
+    category?: string;
     createdAt: Date;
     updatedAt: Date;
 }

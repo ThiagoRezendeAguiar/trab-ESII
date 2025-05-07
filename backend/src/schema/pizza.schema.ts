@@ -6,13 +6,14 @@ export const createPizzaSchema: FastifySchema = {
         required: ["name", "price", "ingredients"],
         properties: {
             name: { type: "string", minLength: 3, maxLength: 50},
-            description: { type: "string", minLength: 10 ,maxLength: 255 },
+            description: { type: "string", minLength: 10, maxLength: 255 },
             price: { type: "number", minimum: 0 },
             ingredients: {
                 type: "array",
                 items: { type: "string" },
                 minItems: 1,
             },
+            category: { type: "string" }, 
         },
         additionalProperties: false,
     },
@@ -28,15 +29,16 @@ export const createPizzaSchema: FastifySchema = {
                     type: "array",
                     items: { type: "string" },
                 },
+                category: { type: "string" }, 
                 isAvailable: { type: "boolean" },
                 createdAt: { type: "string", format: "date-time" },
                 updatedAt: { type: "string", format: "date-time" },
             },
         },
     }
-};
-
-export const updatePizzaSchema = {
+  };
+  
+  export const updatePizzaSchema = {
     params: {
         type: 'object',
         required: ['id'],
@@ -55,6 +57,7 @@ export const updatePizzaSchema = {
                 items: { type: 'string' },
                 minItems: 1
             },
+            category: { type: 'string' }, // Adicionando campo category
             isAvailable: { type: 'boolean' }
         },
         
@@ -73,15 +76,15 @@ export const updatePizzaSchema = {
                     type: 'array',
                     items: { type: 'string' }
                 },
+                category: { type: 'string' }, 
                 isAvailable: { type: 'boolean' },
                 createdAt: { type: 'string', format: 'date-time' },
                 updatedAt: { type: 'string', format: 'date-time' }
             }
         }
     }
-
-    
   };
+  
   export const updateAvailabilitySchema = {
     params: {
         type: 'object',

@@ -8,16 +8,16 @@ import cors from "@fastify/cors";
 
 const server = fastify({logger: true});
 
-// Plugins
+
 server.register(errorHandler);
 server.register(cors, {
-    // Configure CORS options
-    origin: "*", // Allow all origins (replace with specific domains in production)
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allowed methods
-    allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
+   
+    origin: "*", 
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], 
+    allowedHeaders: ["Content-Type", "Authorization"], 
   });
 
-// Health check route
+
 server.get("/", async (request, reply) => {
     return { status: "Ok" };
 });
@@ -25,7 +25,6 @@ server.get("/", async (request, reply) => {
 const start = async () => {
     try {
 
-        // Register routes
         await registerRoutes(server);
 
         await server.listen({port: env.PORT});

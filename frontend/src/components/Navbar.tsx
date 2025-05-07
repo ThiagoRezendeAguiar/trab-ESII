@@ -12,23 +12,25 @@ import {
   IconButton,
   useBreakpointValue,
   Link,
-} from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
-import { FaHome, FaShoppingCart, FaUser, FaBars } from "react-icons/fa";
-import logo from "/pizza-logo.png";
-import React from "react";
-
-type NavbarProps = {
+  Box,
+  } from "@chakra-ui/react";
+  import { useNavigate } from "react-router-dom";
+  import { FaHome, FaShoppingCart, FaUser, FaBars } from "react-icons/fa";
+  import logo from "/pizza-logo.png";
+  import React from "react";
+  import { useCart } from "../contexts/CartContext";
+  
+  type NavbarProps = {
   isAuthenticated: boolean;
-};
-
-const Navbar: React.FC<NavbarProps> = (props: NavbarProps) => {
+  };
+  
+  const Navbar: React.FC<NavbarProps> = (props: NavbarProps) => {
   const { isAuthenticated } = props;
-
+  const { totalItems } = useCart(); // Obter o número total de itens do carrinho
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const isMobile = useBreakpointValue({ base: true, md: false });
-
+  
   return (
     <nav>
       <Stack
@@ -50,24 +52,45 @@ const Navbar: React.FC<NavbarProps> = (props: NavbarProps) => {
               PizzaApp
             </Text>
           </Flex>
-
+  
           {/* Exibe os botões normalmente em telas maiores (md+) */}
           {!isMobile ? (
             <Flex alignItems="center" gap={5}>
               {isAuthenticated ? (
-                <>
+                <React.Fragment>
                   <Link href="/" bg="none" _hover={{ opacity: 0.8 }}>
                     <FaHome size="28" color="orange" />
                   </Link>
                   <Link href="/cart" bg="none" _hover={{ opacity: 0.8 }}>
-                    <FaShoppingCart size="27" color="orange" />
+                    <Box position="relative" display="inline-block">
+                      <FaShoppingCart size="27" color="orange" />
+                      {totalItems > 0 && (
+                        <Box
+                          position="absolute"
+                          top="-8px"
+                          right="-8px"
+                          bg="red.500"
+                          color="white"
+                          borderRadius="full"
+                          w="20px"
+                          h="20px"
+                          display="flex"
+                          alignItems="center"
+                          justifyContent="center"
+                          fontSize="xs"
+                          fontWeight="bold"
+                        >
+                          {totalItems}
+                        </Box>
+                      )}
+                    </Box>
                   </Link>
                   <Link href="/profile" bg="none" _hover={{ opacity: 0.8 }}>
                     <FaUser size="22" color="orange" />
                   </Link>
-                </>
+                </React.Fragment>
               ) : (
-                <>
+                <React.Fragment>
                   <Link
                     href="/login"
                     bg="none"
@@ -88,7 +111,7 @@ const Navbar: React.FC<NavbarProps> = (props: NavbarProps) => {
                   >
                     Register
                   </Link>
-                </>
+                </React.Fragment>
               )}
             </Flex>
           ) : (
@@ -104,7 +127,7 @@ const Navbar: React.FC<NavbarProps> = (props: NavbarProps) => {
           )}
         </Flex>
       </Stack>
-
+  
       {/* Drawer para dispositivos móveis */}
       <Drawer placement="right" onClose={onClose} isOpen={isOpen}>
         <DrawerOverlay />
@@ -112,7 +135,7 @@ const Navbar: React.FC<NavbarProps> = (props: NavbarProps) => {
           <DrawerBody bg="#FFFFFF" pt={8}>
             <Stack spacing={4} align="center">
               {isAuthenticated ? (
-                <>
+                <React.Fragment>
                   <Button
                     w="100%"
                     justifyContent="flex-start"
@@ -128,7 +151,30 @@ const Navbar: React.FC<NavbarProps> = (props: NavbarProps) => {
                   <Button
                     w="100%"
                     justifyContent="flex-start"
-                    leftIcon={<FaShoppingCart size="20" />}
+                    leftIcon={
+                      <Box position="relative" display="inline-block">
+                        <FaShoppingCart size="20" />
+                        {totalItems > 0 && (
+                          <Box
+                            position="absolute"
+                            top="-8px"
+                            right="-8px"
+                            bg="red.500"
+                            color="white"
+                            borderRadius="full"
+                            w="16px"
+                            h="16px"
+                            display="flex"
+                            alignItems="center"
+                            justifyContent="center"
+                            fontSize="10px"
+                            fontWeight="bold"
+                          >
+                            {totalItems}
+                          </Box>
+                        )}
+                      </Box>
+                    }
                     onClick={() => {
                       navigate("/cart");
                       onClose();
@@ -149,9 +195,9 @@ const Navbar: React.FC<NavbarProps> = (props: NavbarProps) => {
                   >
                     Perfil
                   </Button>
-                </>
+                </React.Fragment>
               ) : (
-                <>
+                <React.Fragment>
                   <Button
                     w="100%"
                     justifyContent="flex-start"
@@ -174,7 +220,7 @@ const Navbar: React.FC<NavbarProps> = (props: NavbarProps) => {
                   >
                     Register
                   </Button>
-                </>
+                </React.Fragment>
               )}
             </Stack>
           </DrawerBody>
@@ -182,6 +228,6 @@ const Navbar: React.FC<NavbarProps> = (props: NavbarProps) => {
       </Drawer>
     </nav>
   );
-};
-
-export default Navbar;
+  };
+  
+  export default Navbar;

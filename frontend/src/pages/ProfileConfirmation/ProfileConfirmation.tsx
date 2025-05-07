@@ -7,10 +7,12 @@ import api from "../../services/api";
 import { jwtDecode } from "jwt-decode";
 import { JwtPayload } from "../../interfaces/JwtPayload";
 import { useNavigate } from 'react-router-dom';
+import { useCart } from "../../contexts/CartContext";
 
 const ProfileConfirmation = () => {
   const toast = useToast();
   const navigate = useNavigate();
+  const { items, totalPrice, clearCart } = useCart();
   const [name, setName] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -22,6 +24,8 @@ const ProfileConfirmation = () => {
   const [state, setState] = useState<string>("");
   const [zip, setZip] = useState<string>("");
 
+  const [addressId, setAddressId] = useState<string>("");
+  const [customerId, setCustomerId] = useState<string>("");
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -33,7 +37,7 @@ const ProfileConfirmation = () => {
 
         const decoded = jwtDecode<JwtPayload>(token);
         const userId = decoded.sub;
-
+        setCustomerId(userId);
         handleGetUser(userId);
         handleGetAddress(userId);
       } catch (error) {
@@ -46,37 +50,96 @@ const ProfileConfirmation = () => {
 
   const handleGetUser = async (userId: string) => {
     const response = await api.get(`/customer/${userId}`);
-
+  
     setName(response.data.name);
     setPhone(response.data.phone);
     setEmail(response.data.email);
   };
-
+  
   const handleGetAddress = async (userId: string) => {
     const response = await api.get(`/customer/${userId}/addresses`);
-
+  
     const firstAddress = response.data[0] || {};
-
-    setStreet(firstAddress.street);
-    setDistrict(firstAddress.district);
-    setNumber(firstAddress.number);
-    setCity(firstAddress.city);
-    setState(firstAddress.state);
-    setZip(firstAddress.zipCode);
+    
+    if (firstAddress.id) {
+      setAddressId(firstAddress.id);
+    }
+  
+    setStreet(firstAddress.street || "");
+    setDistrict(firstAddress.district || "");
+    setNumber(firstAddress.number || "");
+    setCity(firstAddress.city || "");
+    setState(firstAddress.state || "");
+    setZip(firstAddress.zipCode || "");
   };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    toast({
-      title: "Info confirmed!",
-      status: "success",
-      duration: 3000,
-      isClosable: true,
-      position: "top-right",
-    });
+    
+    if (!customerId || !addressId) {
+      toast({
+        title: "Error",
+        description: "Customer or address information is missing",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+    
+    if (items.length === 0) {
+      toast({
+        title: "Error",
+        description: "Your cart is empty",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+    
+    try {
+      // Criar o objeto de pedido
+      const orderData = {
+        customerId,
+        addressId,
+        deliveryFee: 5.00, // Valor fixo ou calculado
+        items: items.map(item => ({
+          pizzaId: item.id,
+          size: item.size.toUpperCase(),
+          quantity: item.quantity,
+          notes: item.notes || ""
+        }))
+      };
+      
+      // Enviar para a API
+      const response = await api.post('/order', orderData);
+      
+      toast({
+        title: "Order created successfully!",
+        description: `Order #${response.data.id} has been placed`,
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+      
+      // Limpar o carrinho
+      clearCart();
+      
+      // Redirecionar para a página de pagamento
+      navigate('/payment');
+      
+    } catch (error: any) {
+      console.error("Error creating order:", error);
+      toast({
+        title: "Error creating order",
+        description: error.response?.data?.message || "Please try again",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
   };
-
   return (
     <Stack
       w="100%"
