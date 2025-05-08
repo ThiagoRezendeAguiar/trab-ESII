@@ -4,12 +4,21 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/server.ts"
+    "dev": "tsx src/server.ts",
+    "start": "tsx src/server.ts",
+    "build": "tsc",
+    "seed": "tsx prisma/seed.ts",
+    "migrate": "prisma migrate deploy",
+    "setup:db": "prisma migrate deploy && npm run seed",
+    "setup": "npm install && npm run setup:db"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
+  "prisma": {
+  "seed": "tsx prisma/seed.ts"
+},
   "dependencies": {
     "@fastify/cors": "^11.0.1",
     "@prisma/client": "^6.6.0",
